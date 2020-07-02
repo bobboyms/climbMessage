@@ -4,7 +4,7 @@ import br.com.climb.commons.generictcpclient.GenericTcpClient;
 import br.com.climb.commons.generictcpclient.GenericTcpClientHandler;
 import br.com.climb.commons.generictcpclient.TcpClient;
 import br.com.climb.commons.model.DiscoveryRequest;
-import br.com.climb.message.topic.model.SendMessage;
+import br.com.climb.commons.model.SendMessage;
 
 public class SendMessageClient extends GenericTcpClient<DiscoveryRequest> {
 
@@ -15,7 +15,7 @@ public class SendMessageClient extends GenericTcpClient<DiscoveryRequest> {
     public static void main(String[] args) {
 
         TcpClient discoveryClient = new SendMessageClient(new ClientHandler(), "127.0.0.1",3254);
-        discoveryClient.sendRequest(new SendMessage("java", "Olá mundo"));
+        discoveryClient.sendRequest(new SendMessage("cliente", "Olá mundo"));
         Integer response = (Integer) discoveryClient.getResponse();
 
         discoveryClient.closeConnection();

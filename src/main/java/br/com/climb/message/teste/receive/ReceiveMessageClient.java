@@ -3,7 +3,7 @@ package br.com.climb.message.teste.receive;
 import br.com.climb.commons.generictcpclient.GenericTcpClient;
 import br.com.climb.commons.generictcpclient.GenericTcpClientHandler;
 import br.com.climb.commons.generictcpclient.TcpClient;
-import br.com.climb.message.topic.model.ReceiveMessage;
+import br.com.climb.commons.model.ReceiveMessage;
 
 public class ReceiveMessageClient extends GenericTcpClient<String> {
 

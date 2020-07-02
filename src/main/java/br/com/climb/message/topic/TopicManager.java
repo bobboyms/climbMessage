@@ -1,6 +1,6 @@
 package br.com.climb.message.topic;
 
-import br.com.climb.message.topic.model.SendMessage;
+import br.com.climb.commons.model.SendMessage;
 
 import java.util.*;
 
