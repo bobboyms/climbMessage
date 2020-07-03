@@ -1,6 +1,7 @@
 package br.com.climb.message.server;
 
 import br.com.climb.commons.configuration.ConfigFile;
+import br.com.climb.message.rpc.RpcManager;
 import br.com.climb.message.topic.TopicManager;
 import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
@@ -25,7 +26,7 @@ public class Server implements TcpServer {
         acceptor.getFilterChain().addLast( "logger1", new LoggingFilter() );
         acceptor.getFilterChain().addLast( "codec1", new ProtocolCodecFilter(
                 new ObjectSerializationCodecFactory()));
-        acceptor.setHandler( new ServerHandler(new TopicManager()) );
+        acceptor.setHandler( new ServerHandler(new TopicManager(), new RpcManager()) );
         acceptor.getSessionConfig().setReadBufferSize( 2048 );
         acceptor.bind(new InetSocketAddress(new Integer(configFile.getLocalPort())));
 

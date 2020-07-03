@@ -2,6 +2,10 @@ package br.com.climb.message.server;
 
 import br.com.climb.commons.model.ReceiveMessage;
 import br.com.climb.commons.model.SendMessage;
+import br.com.climb.message.rpc.RpcManager;
+import br.com.climb.message.rpc.model.KeyRpc;
+import br.com.climb.message.rpc.model.RpcRequest;
+import br.com.climb.message.rpc.model.RpcResponse;
 import br.com.climb.message.topic.Topic;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
@@ -18,17 +22,63 @@ public class ServerHandler extends IoHandlerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(ServerHandler.class);
 
     private final Topic topic;
+    private final RpcManager manager;
 
-    public ServerHandler(Topic topicMessage) {
+    public ServerHandler(Topic topicMessage, RpcManager manager) {
         this.topic = topicMessage;
+        this.manager = manager;
     }
 
     @Override
     public void messageReceived(IoSession session, Object message) throws Exception {
 
+
+
         try {
 
-//            System.out.println("SendMessage receive: " + message);
+            System.out.println("SendMessage receive: " + message);
+
+            //****************** rpc ***************
+
+            if (message.getClass() == KeyRpc.class) {
+
+                final KeyRpc key = (KeyRpc)message;
+
+                if (key.getType().equals(KeyRpc.TYPE_GET_RESPONSE_ONE)) {
+                    RpcResponse response = manager.getResponse(key.getUuid());
+                    if (Objects.isNull(response)) {
+                        response = new RpcResponse("",500,null);
+                    }
+                    session.write(response);
+                    return;
+                }
+
+                if (key.getType().equals(KeyRpc.TYPE_GET_RESPONSE_LIST)) {
+                    List<RpcRequest> rpcRequests = manager.getRequestList();
+                    if (Objects.isNull(rpcRequests)) {
+                        rpcRequests = new ArrayList<>();
+                    }
+                    session.write(rpcRequests);
+                    return;
+                }
+
+            }
+
+            if (message.getClass() == RpcRequest.class) {
+                RpcRequest request = (RpcRequest)message;
+                manager.addRequest(request.getUuid(), request);
+                session.write(200);
+                return;
+            }
+
+            if (message.getClass() == RpcResponse.class) {
+                RpcResponse response = (RpcResponse) message;
+                manager.addResponse(response.getUuid(), response);
+                session.write(200);
+                return;
+            }
+
+            //******************* messageria ******************//
 
             if (message.getClass() == String.class) {
 

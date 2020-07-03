@@ -7,30 +7,30 @@ import java.util.*;
 public class TopicManager implements Topic {
 
     //topico e message
-    private static final Map<String, List<SendMessage>> topics = Collections.synchronizedMap(new HashMap<>()); //new ConcurrentHashMap<>();
+    private static final Map<String, List<SendMessage>> TOPICS = Collections.synchronizedMap(new HashMap<>()); //new ConcurrentHashMap<>();
 
     @Override
     public void addTopic(String topic, SendMessage sendMessage) {
 
-        List<SendMessage> sendMessages = topics.get(topic);
+        List<SendMessage> sendMessages = TOPICS.get(topic);
 
         if (sendMessages == null) {
             sendMessages = Collections.synchronizedList(new ArrayList<>());
         }
 
         sendMessages.add(sendMessage);
-        topics.put(topic, sendMessages);
+        TOPICS.put(topic, sendMessages);
     }
 
     @Override
     public List<SendMessage> getMessageTopic(String topic) {
-        return topics.get(topic);
+        return TOPICS.get(topic);
     }
 
     @Override
     public void removeMessageTopic(String topic, List<SendMessage> sendMessages) {
 
-        final List<SendMessage> msg = topics.get(topic);
+        final List<SendMessage> msg = TOPICS.get(topic);
         msg.removeAll(sendMessages);
 
 //        topics.entrySet().stream()
