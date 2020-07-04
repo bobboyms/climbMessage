@@ -5,6 +5,7 @@ import br.com.climb.commons.model.SendMessage;
 import br.com.climb.commons.model.rpc.KeyRpc;
 import br.com.climb.commons.model.rpc.RpcRequest;
 import br.com.climb.commons.model.rpc.RpcResponse;
+import br.com.climb.message.exception.TypeNotSupported;
 import br.com.climb.message.rpc.RpcManager;
 import br.com.climb.message.topic.Topic;
 import org.apache.mina.core.service.IoHandlerAdapter;
@@ -97,10 +98,15 @@ public class ServerHandler extends IoHandlerAdapter {
                 return;
             }
 
-            SendMessage topic = (SendMessage) message;
-            this.topic.addTopic(topic.getTopicName(),topic);
-            session.write(new Integer(200));
-            session.closeOnFlush();
+            if (message.getClass() == SendMessage.class) {
+                SendMessage topic = (SendMessage) message;
+                this.topic.addTopic(topic.getTopicName(),topic);
+                session.write(new Integer(200));
+                session.closeOnFlush();
+                return;
+            }
+
+            throw new TypeNotSupported("Tipo não suportado pelo servidor");
 
         } catch (Exception e) {
             logger.error("responseForClient {}", e);
