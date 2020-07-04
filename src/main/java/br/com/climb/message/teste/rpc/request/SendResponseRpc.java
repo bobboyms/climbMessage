@@ -3,9 +3,7 @@ package br.com.climb.message.teste.rpc.request;
 import br.com.climb.commons.generictcpclient.GenericTcpClient;
 import br.com.climb.commons.generictcpclient.GenericTcpClientHandler;
 import br.com.climb.commons.generictcpclient.TcpClient;
-import br.com.climb.commons.model.SendMessage;
-import br.com.climb.message.rpc.model.RpcRequest;
-import br.com.climb.message.rpc.model.RpcResponse;
+import br.com.climb.commons.model.rpc.RpcResponse;
 
 public class SendResponseRpc extends GenericTcpClient<RpcResponse> {
 

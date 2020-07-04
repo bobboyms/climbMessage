@@ -4,7 +4,7 @@ import br.com.climb.commons.generictcpclient.GenericTcpClient;
 import br.com.climb.commons.generictcpclient.GenericTcpClientHandler;
 import br.com.climb.commons.generictcpclient.TcpClient;
 import br.com.climb.commons.model.SendMessage;
-import br.com.climb.message.rpc.model.RpcRequest;
+import br.com.climb.commons.model.rpc.RpcRequest;
 
 public class SendRequestRpc extends GenericTcpClient<RpcRequest> {
 

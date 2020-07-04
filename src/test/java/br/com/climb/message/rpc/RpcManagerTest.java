@@ -1,10 +1,9 @@
 package br.com.climb.message.rpc;
 
 import br.com.climb.commons.generictcpclient.TcpClient;
-import br.com.climb.commons.model.SendMessage;
-import br.com.climb.message.rpc.model.KeyRpc;
-import br.com.climb.message.rpc.model.RpcRequest;
-import br.com.climb.message.rpc.model.RpcResponse;
+import br.com.climb.commons.model.rpc.KeyRpc;
+import br.com.climb.commons.model.rpc.RpcRequest;
+import br.com.climb.commons.model.rpc.RpcResponse;
 import br.com.climb.message.teste.rpc.request.GetKeyHandler;
 import br.com.climb.message.teste.rpc.request.SendKeyRpc;
 import br.com.climb.message.teste.rpc.request.SendResponseRpc;
@@ -28,48 +27,46 @@ class RpcManagerTest {
     @Test
     void addRequest() throws InterruptedException {
 
-        new Thread(()->{
+//        new Thread(()->{
 //
-//            RpcManager manager = new RpcManager();
+//            List<KeyRpc> chamadas = new ArrayList<>();
 //
-            List<KeyRpc> chamadas = new ArrayList<>();
-
-            IntStream.range(0, 5000).forEach(index -> {
-                String uuid = UUID.randomUUID().toString();
-                chamadas.add(new KeyRpc(uuid, KeyRpc.TYPE_GET_RESPONSE_ONE));
-                RpcRequest request = new RpcRequest(uuid, "somar", new Object[]{index,2});
-
-                TcpClient discoveryClient = new SendRequestRpc(new SendtHandler(), "127.0.0.1",3254);
-                discoveryClient.sendRequest(request);
-                Integer response = (Integer) discoveryClient.getResponse();
-                discoveryClient.closeConnection();
-
-                System.out.println("Resposta: " + response);
-
-            });
-
-            while (true) {
-
-                chamadas.stream().forEach(key -> {
-
-                    try {
-                        Thread.sleep(0,100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    TcpClient discoveryClient = new GetRequestRpc(new GetHandler(), "127.0.0.1",3254);
-                    discoveryClient.sendRequest(key);
-                    Object response = discoveryClient.getResponse();
-                    discoveryClient.closeConnection();
-
-                    System.out.println("Resposta: " + response);
-
-                });
-
-            }
-
-        }).start();
+//            IntStream.range(0, 10).forEach(index -> {
+//                String uuid = UUID.randomUUID().toString();
+//                chamadas.add(new KeyRpc(uuid, KeyRpc.TYPE_GET_RESPONSE_ONE));
+//                RpcRequest request = new RpcRequest(uuid, "somar", new Object[]{index,2});
+//
+//                TcpClient discoveryClient = new SendRequestRpc(new SendtHandler(), "127.0.0.1",3254);
+//                discoveryClient.sendRequest(request);
+//                Integer response = (Integer) discoveryClient.getResponse();
+//                discoveryClient.closeConnection();
+//
+////                System.out.println("Resposta: " + response);
+//
+//            });
+//
+//            while (true) {
+//
+//                chamadas.stream().forEach(key -> {
+//
+//                    try {
+//                        Thread.sleep(0,100);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    TcpClient discoveryClient = new GetRequestRpc(new GetHandler(), "127.0.0.1",3254);
+//                    discoveryClient.sendRequest(key);
+//                    Object response = discoveryClient.getResponse();
+//                    discoveryClient.closeConnection();
+//
+//                    System.out.println("Resposta: " + response);
+//
+//                });
+//
+//            }
+//
+//        }).start();
 
         //processa a requisição
         new Thread(()-> {
@@ -93,7 +90,7 @@ class RpcManagerTest {
 
                 List<RpcRequest> rpcRequests = (List<RpcRequest>)result;
 
-//                System.out.println("RPC: " + rpcRequests);
+                System.out.println("RPC: " + rpcRequests);
 
                 rpcRequests.forEach(rpcRequest -> {
                     Object rsult = somar((Integer) rpcRequest.getArgs()[0], (Integer) rpcRequest.getArgs()[1]);
@@ -113,7 +110,7 @@ class RpcManagerTest {
 
         }).start();
 
-        Thread.sleep(900000);
+        Thread.sleep(90000);
 
     }
 

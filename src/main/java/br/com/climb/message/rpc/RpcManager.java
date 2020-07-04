@@ -1,7 +1,7 @@
 package br.com.climb.message.rpc;
 
-import br.com.climb.message.rpc.model.RpcRequest;
-import br.com.climb.message.rpc.model.RpcResponse;
+import br.com.climb.commons.model.rpc.RpcRequest;
+import br.com.climb.commons.model.rpc.RpcResponse;
 
 import java.util.Collections;
 import java.util.HashMap;

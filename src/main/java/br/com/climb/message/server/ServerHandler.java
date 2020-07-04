@@ -2,10 +2,10 @@ package br.com.climb.message.server;
 
 import br.com.climb.commons.model.ReceiveMessage;
 import br.com.climb.commons.model.SendMessage;
+import br.com.climb.commons.model.rpc.KeyRpc;
+import br.com.climb.commons.model.rpc.RpcRequest;
+import br.com.climb.commons.model.rpc.RpcResponse;
 import br.com.climb.message.rpc.RpcManager;
-import br.com.climb.message.rpc.model.KeyRpc;
-import br.com.climb.message.rpc.model.RpcRequest;
-import br.com.climb.message.rpc.model.RpcResponse;
 import br.com.climb.message.topic.Topic;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
@@ -32,13 +32,11 @@ public class ServerHandler extends IoHandlerAdapter {
     @Override
     public void messageReceived(IoSession session, Object message) throws Exception {
 
-
-
         try {
 
-            System.out.println("SendMessage receive: " + message);
-
             //****************** rpc ***************
+
+//            System.out.println("Receive: " + message);
 
             if (message.getClass() == KeyRpc.class) {
 
@@ -47,9 +45,10 @@ public class ServerHandler extends IoHandlerAdapter {
                 if (key.getType().equals(KeyRpc.TYPE_GET_RESPONSE_ONE)) {
                     RpcResponse response = manager.getResponse(key.getUuid());
                     if (Objects.isNull(response)) {
-                        response = new RpcResponse("",500,null);
+                        response = new RpcResponse("",400,null);
                     }
                     session.write(response);
+                    session.closeOnFlush();
                     return;
                 }
 
@@ -59,15 +58,16 @@ public class ServerHandler extends IoHandlerAdapter {
                         rpcRequests = new ArrayList<>();
                     }
                     session.write(rpcRequests);
+                    session.closeOnFlush();
                     return;
                 }
-
             }
 
             if (message.getClass() == RpcRequest.class) {
                 RpcRequest request = (RpcRequest)message;
                 manager.addRequest(request.getUuid(), request);
                 session.write(200);
+                session.closeOnFlush();
                 return;
             }
 
@@ -75,6 +75,7 @@ public class ServerHandler extends IoHandlerAdapter {
                 RpcResponse response = (RpcResponse) message;
                 manager.addResponse(response.getUuid(), response);
                 session.write(200);
+                session.closeOnFlush();
                 return;
             }
 
@@ -91,16 +92,20 @@ public class ServerHandler extends IoHandlerAdapter {
                     session.write(new ReceiveMessage((String) message, new ArrayList<>()));
                 }
 
+                session.closeOnFlush();
+
                 return;
             }
 
             SendMessage topic = (SendMessage) message;
             this.topic.addTopic(topic.getTopicName(),topic);
             session.write(new Integer(200));
+            session.closeOnFlush();
 
         } catch (Exception e) {
             logger.error("responseForClient {}", e);
             session.write(new Integer(500));
+            session.closeOnFlush();
 //            response.setStatus(500);
 //            response.setBody(e.getMessage().getBytes());
 //            session.write(response);
@@ -112,7 +117,8 @@ public class ServerHandler extends IoHandlerAdapter {
     public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
 
         System.out.println("---- deu erro ----");
-        session.write(new Integer(500));
+//        session.write(new Integer(500));
+        session.closeNow();
         System.out.println(cause);
 //        ObjectResponse response = new ObjectResponse();
 //

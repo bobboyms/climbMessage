@@ -35,6 +35,11 @@ public class Server implements TcpServer {
         System.out.println("--          STARTUP SERVER CLIMB MESSAGE           --");
         System.out.println("--                                                 --");
         System.out.println("-----------------------------------------------------");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("##### LOCAL PORT: " + configFile.getLocalPort());
+        System.out.println("");
+        System.out.println("");
 
     }
 }

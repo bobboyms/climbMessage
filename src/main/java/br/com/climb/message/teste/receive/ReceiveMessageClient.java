@@ -13,7 +13,7 @@ public class ReceiveMessageClient extends GenericTcpClient<String> {
 
     public static void main(String[] args) {
 
-        TcpClient discoveryClient = new ReceiveMessageClient(new ClientHandler(), "127.0.0.1",3254);
+        TcpClient discoveryClient = new ReceiveMessageClient(new ClientHandler(), "127.0.0.1",6987);
         discoveryClient.sendRequest("java");
         ReceiveMessage response = (ReceiveMessage) discoveryClient.getResponse();
 
