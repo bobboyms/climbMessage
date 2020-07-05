@@ -16,11 +16,11 @@ public class SendKeyRpc extends GenericTcpClient<KeyRpc> {
 
     public static void main(String[] args) {
 
-        TcpClient discoveryClient = new SendKeyRpc(new GetKeyHandler(), "127.0.0.1",3254);
-        discoveryClient.sendRequest(new KeyRpc("", KeyRpc.TYPE_GET_RESPONSE_LIST));
-        List<RpcRequest> rpcRequests = (List<RpcRequest>) discoveryClient.getResponse();
-
-        discoveryClient.closeConnection();
+//        TcpClient discoveryClient = new SendKeyRpc(new GetKeyHandler(), "127.0.0.1",3254);
+//        discoveryClient.sendRequest(new KeyRpc("", KeyRpc.TYPE_GET_RESPONSE_LIST));
+//        List<RpcRequest> rpcRequests = (List<RpcRequest>) discoveryClient.getResponse();
+//
+//        discoveryClient.closeConnection();
 //        System.out.println("Resposta:" + response);
 
 

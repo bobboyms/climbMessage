@@ -54,7 +54,8 @@ public class ServerHandler extends IoHandlerAdapter {
                 }
 
                 if (key.getType().equals(KeyRpc.TYPE_GET_RESPONSE_LIST)) {
-                    List<RpcRequest> rpcRequests = manager.getRequestList();
+//                    System.out.println("key: " + key);
+                    List<RpcRequest> rpcRequests = manager.getRequestList(key.getMethods());
                     if (Objects.isNull(rpcRequests)) {
                         rpcRequests = new ArrayList<>();
                     }

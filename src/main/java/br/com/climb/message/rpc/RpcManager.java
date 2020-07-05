@@ -3,10 +3,7 @@ package br.com.climb.message.rpc;
 import br.com.climb.commons.model.rpc.RpcRequest;
 import br.com.climb.commons.model.rpc.RpcResponse;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RpcManager {
@@ -26,8 +23,10 @@ public class RpcManager {
         RPC_RESPONSE_MAP.put(key, rpcResponse);
     }
 
-    public List<RpcRequest> getRequestList() {
+    public List<RpcRequest> getRequestList(List<String> methods) {
+
         return RPC_REQUEST_MAP.entrySet().stream()
+                .filter(entry -> methods.contains(entry.getValue().getMethodName()))
                 .map(entry -> entry.getValue())
                 .collect(Collectors.toList());
     }
